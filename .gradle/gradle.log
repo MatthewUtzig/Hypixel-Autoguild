@@ -1,0 +1,29 @@
+This mapping 'stable_20' was designed for MC 1.8.8! Use at your own peril.This mapping 'stable_20' was designed for MC 1.8.8! Use at your own peril.
+
+:deobfCompileDummyTask
+:deobfProvidedDummyTask
+:getVersionJson
+:extractUserdev UP-TO-DATE
+:extractDependencyATs SKIPPED
+:extractMcpData SKIPPED
+:extractMcpMappings SKIPPED
+:genSrgs SKIPPED
+:downloadClient SKIPPED
+:downloadServer SKIPPED
+:splitServerJar SKIPPED
+:mergeJars SKIPPED
+:deobfMcSRG SKIPPED
+:decompileMc SKIPPED
+:fixMcSources SKIPPED
+:applySourcePatches SKIPPED
+:remapMcSources SKIPPED
+:recompileMc SKIPPED
+:extractNatives SKIPPED
+:getAssetIndex UP-TO-DATE
+:getAssets
+:makeStart
+:setupDecompWorkspace
+
+BUILD SUCCESSFUL
+
+Total time: 7.357 secs
