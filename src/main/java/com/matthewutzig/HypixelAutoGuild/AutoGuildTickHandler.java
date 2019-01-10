@@ -65,7 +65,7 @@ public class AutoGuildTickHandler {
                         //strip rank tag if it exists
                         for (int i = 0; i < splitMessage.length; i++) {
                             if (splitMessage[i].contains("]")) {
-                                splitMessage[i] = splitMessage[i].substring(splitMessage[i].indexOf("]") + 2);
+                                splitMessage[i] = splitMessage[i].substring(splitMessage[i].indexOf("]") + 1);
                             }
                         }
                         int kickCount = 0; //make sure not to kick too many
