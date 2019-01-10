@@ -14,10 +14,11 @@ public class AutoGuildTickHandler {
     protected static final int PRUNE_LIMIT = 123; //the maximum number of players in the guild before pruning starts.
     protected static final int PRUNE_COUNT = 5; //the number of members to prune.
     protected static final boolean CHAT_DEBUG = true; //output all unformatted chat
+    //protected static final boolean ENABLE_MOTD = false;
 
     protected static ArrayList<String> messages = new ArrayList<String>();
     protected static int tickRemaining = 0;
-
+    protected static int kickCount = 0;
 
     protected static boolean newLobby = true; //stores whether to warp to new lobby
     protected static boolean guildMembers = false; //stores whether the next chat messages will be the list of guild members
@@ -25,6 +26,7 @@ public class AutoGuildTickHandler {
     protected static boolean skipPruneCheck = false;
     protected static boolean guildCheck = true; //used for determining when to switch lobbies
     protected static boolean waitingForLobby = false;
+    protected static boolean lookForSupporters = false;
 
     public static boolean scriptEnabled = false;
 
@@ -44,6 +46,21 @@ public class AutoGuildTickHandler {
                     System.out.println(message);
                 }
 
+                //promote supporters
+                if (message.contains("\u00a7r\u00a7ejoined the guild") || message.contains("\u00a7r\u00a7e joined the guild")) {
+                    //get player name
+                    String name = message.substring(2, message.indexOf(" "));
+                    if (name.contains("\u00a7")) {
+                        name = name.substring(0, name.indexOf("\u00a7"));
+                    }
+                    if(LostshardSupporters.isSupporter(name)) {
+                        System.out.println("Promoted " + name + " to supporter.");
+                        messages.add("guild demote " + name);
+                    } else {
+                        System.out.println("Did not promote " + name + " to supporter.");
+                    }
+                }
+
                 //auto guild accept
                 if (message.contains("\u00a7r\u00a7b/guild accept")) {
                     String name = message.substring(message.indexOf("\u00a7r\u00a7b/guild accept") + 18);
@@ -55,8 +72,6 @@ public class AutoGuildTickHandler {
                         //check if chat message contains guild members
                         if (guildMembers) {
                             guildMembers = false;
-                            abovePruneLimit = false;
-                            skipPruneCheck = true;
                             //replace all reset formatters and spaces and split online members into array.
                             message = message.replace(" ", "");
                             message = message.replace("\u00a7r", "");
@@ -71,7 +86,9 @@ public class AutoGuildTickHandler {
                                     splitMessage[i] = splitMessage[i].substring(splitMessage[i].indexOf("]") + 1);
                                 }
                             }
-                            int kickCount = 0; //make sure not to kick too many
+                            if(!lookForSupporters) {
+                                kickCount = 0; //make sure not to kick too many
+                            }
                             //only color code left is red. Get if it is light red (offline)
                             for (int i = 0; i < splitMessage.length; i++) {
                                 if (splitMessage[i].contains("\u00a7c")) {
@@ -81,11 +98,26 @@ public class AutoGuildTickHandler {
                                     messages.add("guild kick " + playerName + " you were kicked for inactivity. /guild join MatthewUtzig");
                                     kickCount++;
                                     if (kickCount >= PRUNE_COUNT) {
+                                        kickCount = 0;
+                                        abovePruneLimit = false;
+                                        skipPruneCheck = true;
                                         return;
                                     }
                                 }
                             }
-                        } else if (message.contains("-- Member --")) {
+                            if(!lookForSupporters) {
+                                lookForSupporters = true;
+                            } else {
+                                //all members checked
+                                kickCount = 0;
+                                abovePruneLimit = false;
+                                skipPruneCheck = true;
+                                return;
+                            }
+                        } else if (!lookForSupporters && message.contains("-- Member --")) {
+                            //next message will contain guild members
+                            guildMembers = true;
+                        } else if (lookForSupporters && message.contains("-- Supporter --")) {
                             //next message will contain guild members
                             guildMembers = true;
                         }
@@ -191,8 +223,10 @@ public class AutoGuildTickHandler {
                 }
                 //5% change of adding motd
                 Random rand = new Random();
-                if(rand.nextInt(50) == 10) {
-                    messages.add("gchat " + MessageOfTheDay.getMOTD());
+                if(rand.nextInt(75) == 10) {
+                    //if(ENABLE_MOTD) {
+                        messages.add("gchat " + MessageOfTheDay.getMOTD());
+                    //}
                 }
             }
         } catch (Exception e) {
