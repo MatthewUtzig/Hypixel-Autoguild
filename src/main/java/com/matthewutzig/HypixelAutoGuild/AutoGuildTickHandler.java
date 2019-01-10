@@ -10,8 +10,8 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import java.util.ArrayList;
 
 public class AutoGuildTickHandler {
-    protected static final int PRUNE_LIMIT = 120; //the maximum number of players in the guild before pruning starts.
-    protected static final int PRUNE_COUNT = 10; //the number of members to prune.
+    protected static final int PRUNE_LIMIT = 125; //the maximum number of players in the guild before pruning starts.
+    protected static final int PRUNE_COUNT = 5; //the number of members to prune.
     protected static final boolean CHAT_DEBUG = true; //output all unformatted chat
 
     protected static ArrayList<String> messages = new ArrayList<String>();
@@ -23,6 +23,7 @@ public class AutoGuildTickHandler {
     protected static boolean abovePruneLimit = false; //stores whether to begin the pruning process
     protected static boolean skipPruneCheck = false;
     protected static boolean guildCheck = true; //used for determining when to switch lobbies
+    protected static boolean waitingForLobby = false;
 
     public static boolean scriptEnabled = false;
 
@@ -121,6 +122,13 @@ public class AutoGuildTickHandler {
             if (tickRemaining <= 0) {
                 //set counter back to 30 ticks
                 tickRemaining = 30;
+                //check if read to send /lobby
+                if(waitingForLobby) {
+                    waitingForLobby = false;
+                    Minecraft.getMinecraft().thePlayer.sendChatMessage("/lobby");
+                    return;
+                }
+
                 if (messages.size() > 0) {
                     //remove last message from arrayList
                     String lastMessage = messages.get(messages.size() - 1);
@@ -142,7 +150,16 @@ public class AutoGuildTickHandler {
                             //go to new lobby
                             newLobby = false;
                             guildCheck = true;
-                            Minecraft.getMinecraft().thePlayer.sendChatMessage("/lobby");
+                            String command = HypixelPlayCommands.getPlayCommand();
+                            if(command.equals("lobby")) {
+                                Minecraft.getMinecraft().thePlayer.sendChatMessage("/lobby");
+                            } else {
+                                //hault command execution for ~1.5 seconds
+                                tickRemaining = 90;
+                                Minecraft.getMinecraft().thePlayer.sendChatMessage("/" + command);
+                                waitingForLobby = true;
+                            }
+
                         }
                     } else {
                         //get all players and queue invite commands
