@@ -41,6 +41,11 @@ public class AutoGuildTickHandler {
                 System.out.println(message);
             }
 
+            //auto guild accept
+            if(message.contains("\u00a7r\u00a7b/guild accept")) {
+                String name = message.substring(message.indexOf("\u00a7r\u00a7b/guild accept") + 18);
+                messages.add("guild accept " + name.substring(0,name.indexOf("!") - 3));
+            }
 
             if(!skipPruneCheck) {
                 if (abovePruneLimit) {
@@ -70,7 +75,7 @@ public class AutoGuildTickHandler {
                                 //add kick player to command queue
                                 String playerName = splitMessage[i].substring(0, splitMessage[i].indexOf("\u00a7c"));
                                 System.out.println("Added " + playerName + " to the kick queue.");
-                                messages.add("guild kick " + playerName + " you were kicked for inactivity (not personal). To rejoin, find f_w.");
+                                messages.add("guild kick " + playerName + " you were kicked for inactivity. /guild join MatthewUtzig");
                                 kickCount++;
                                 if (kickCount >= PRUNE_COUNT) {
                                     return;
