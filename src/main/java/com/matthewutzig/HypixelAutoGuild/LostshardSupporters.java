@@ -25,7 +25,9 @@ public class LostshardSupporters {
             supporters.add("cannedmeats");
             supporters.add("shacor");
             supporters.add("evetimi");
-
+            supporters.add("spheredsphered10");
+            supporters.add("xdavidet");
+            supporters.add("swarnava");
         }
         return supporters.contains(name.toLowerCase());
 

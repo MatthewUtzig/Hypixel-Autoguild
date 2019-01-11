@@ -225,7 +225,19 @@ public class AutoGuildTickHandler {
                 Random rand = new Random();
                 if(rand.nextInt(75) == 10) {
                     //if(ENABLE_MOTD) {
-                        messages.add("gchat " + MessageOfTheDay.getMOTD());
+                        String motd = MessageOfTheDay.getMOTD();
+                        if(motd.equals("yt") || motd.equals("github")) {
+                         //workaround for double messages dont want to make a better systems
+                         if(motd.equals("yt")) {
+                             messages.add("gchat This guild has a youtube. Subscribe at https://www.youtube.com/user/mattzzigster");
+                         }   else {
+                             messages.add("gchat Follow the guild github at https://github.com/MatthewUtzig");
+                         }
+
+                         messages.add("gchat Afterwards, follow the instructions at https://discord.gg/hUAfPmS to get Supporter.");
+                        } else {
+                            messages.add("gchat " + MessageOfTheDay.getMOTD());
+                        }
                     //}
                 }
             }
