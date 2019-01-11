@@ -16,6 +16,16 @@ public class LostshardSupporters {
             supporters.add("jedleo");
             supporters.add("_chlxe");
             supporters.add("astoeth");
+            supporters.add("advocat_");
+            supporters.add("stringsoffantasy");
+            supporters.add("distillatez");
+            supporters.add("nerdycombos");
+            supporters.add("garygary1275");
+            supporters.add("richienb");
+            supporters.add("cannedmeats");
+            supporters.add("shacor");
+            supporters.add("evetimi");
+
         }
         return supporters.contains(name.toLowerCase());
 
