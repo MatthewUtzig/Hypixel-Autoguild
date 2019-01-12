@@ -13,7 +13,7 @@ import java.util.Random;
 public class AutoGuildTickHandler {
     protected static final int PRUNE_LIMIT = 123; //the maximum number of players in the guild before pruning starts.
     protected static final int PRUNE_COUNT = 5; //the number of members to prune.
-    protected static final boolean CHAT_DEBUG = true; //output all unformatted chat
+    protected static final boolean CHAT_DEBUG = false; //output all unformatted chat
     //protected static final boolean ENABLE_MOTD = false;
 
     protected static ArrayList<String> messages = new ArrayList<String>();
@@ -49,15 +49,20 @@ public class AutoGuildTickHandler {
                 //promote supporters
                 if (message.contains("\u00a7r\u00a7ejoined the guild") || message.contains("\u00a7r\u00a7e joined the guild")) {
                     //get player name
-                    String name = message.substring(2, message.indexOf(" "));
-                    if (name.contains("\u00a7")) {
-                        name = name.substring(0, name.indexOf("\u00a7"));
+                    if (message.contains("]")) { //ranks
+                        message = message.substring(message.indexOf("]") + 2);
+                        message = message.substring(0,message.indexOf("\u00a7"));
+                    } else { //non ranks
+                        message = message.substring(2, message.indexOf(" "));
+                        if (message.contains("\u00a7")) {
+                            message = message.substring(0, message.indexOf("\u00a7"));
+                        }
                     }
-                    if(LostshardSupporters.isSupporter(name)) {
-                        System.out.println("Promoted " + name + " to supporter.");
-                        messages.add("guild demote " + name);
+                    if(LostshardSupporters.isSupporter(message)) {
+                        System.out.println("Promoted " + message + " to supporter.");
+                        messages.add("guild demote " + message);
                     } else {
-                        System.out.println("Did not promote " + name + " to supporter.");
+                        System.out.println("Did not promote " + message + " to supporter.");
                     }
                 }
 
@@ -223,21 +228,9 @@ public class AutoGuildTickHandler {
                 }
                 //5% change of adding motd
                 Random rand = new Random();
-                if(rand.nextInt(75) == 10) {
+                if(rand.nextInt(150) == 10) {
                     //if(ENABLE_MOTD) {
-                        String motd = MessageOfTheDay.getMOTD();
-                        if(motd.equals("yt") || motd.equals("github")) {
-                         //workaround for double messages dont want to make a better systems
-                         if(motd.equals("yt")) {
-                             messages.add("gchat This guild has a youtube. Subscribe at https://www.youtube.com/user/mattzzigster");
-                         }   else {
-                             messages.add("gchat Follow the guild github at https://github.com/MatthewUtzig");
-                         }
-
-                         messages.add("gchat Afterwards, follow the instructions at https://discord.gg/hUAfPmS to get Supporter.");
-                        } else {
-                            messages.add("gchat " + MessageOfTheDay.getMOTD());
-                        }
+                        messages.add("gchat " + MessageOfTheDay.getMOTD());
                     //}
                 }
             }

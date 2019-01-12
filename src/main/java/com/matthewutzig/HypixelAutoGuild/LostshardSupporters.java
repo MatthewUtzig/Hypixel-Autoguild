@@ -28,6 +28,7 @@ public class LostshardSupporters {
             supporters.add("spheredsphered10");
             supporters.add("xdavidet");
             supporters.add("swarnava");
+            supporters.add("itsnt");
         }
         return supporters.contains(name.toLowerCase());
 
