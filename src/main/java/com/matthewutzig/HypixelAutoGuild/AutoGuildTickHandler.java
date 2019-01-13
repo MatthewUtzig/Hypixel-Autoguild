@@ -58,6 +58,9 @@ public class AutoGuildTickHandler {
                             message = message.substring(0, message.indexOf("\u00a7"));
                         }
                     }
+                    if(BannedPlayers.isBanned(message)) {
+                        messages.add("guild kick " + message + " you are banned from the guild. Appeal at https://discord.gg/hUAfPmS");
+                    }
                     if(LostshardSupporters.isSupporter(message)) {
                         System.out.println("Promoted " + message + " to supporter.");
                         messages.add("guild demote " + message);
