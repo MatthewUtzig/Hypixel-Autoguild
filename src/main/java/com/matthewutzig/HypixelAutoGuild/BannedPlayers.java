@@ -12,8 +12,9 @@ public class BannedPlayers {
             banned.add("dicxt");
             banned.add("ilovegifts");
             banned.add("akiara23");
-
-
+            banned.add("exotico");
+            banned.add("flashcan1");
+            banned.add("lonelythunderfox");
         }
         return banned.contains(name.toLowerCase());
 

@@ -40,6 +40,9 @@ public class LostshardSupporters {
             supporters.add("sc_brightstar");
             supporters.add("croooked");
             supporters.add("annaliarose1");
+            supporters.add("techmarkgaming");
+            supporters.add("whitplayz");
+            supporters.add("paulobbe");
         }
         return supporters.contains(name.toLowerCase());
 

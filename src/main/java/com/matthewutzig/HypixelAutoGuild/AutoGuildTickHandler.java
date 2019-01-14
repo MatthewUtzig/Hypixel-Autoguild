@@ -6,9 +6,14 @@ import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import scala.actors.migration.pattern;
+
+import java.util.regex.Pattern;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class AutoGuildTickHandler {
     protected static final int PRUNE_LIMIT = 123; //the maximum number of players in the guild before pruning starts.
@@ -28,6 +33,10 @@ public class AutoGuildTickHandler {
     protected static boolean waitingForLobby = false;
     protected static boolean lookForSupporters = false;
 
+    protected static Pattern pt;
+    protected static ArrayList<String> badwords = new ArrayList<String>();
+    protected static boolean initialized = false;
+
     public static boolean scriptEnabled = false;
 
     @SubscribeEvent
@@ -45,6 +54,26 @@ public class AutoGuildTickHandler {
                 if (CHAT_DEBUG) {
                     System.out.println(message);
                 }
+
+                //filter profane language
+                /*if(message.contains("Guild >")) {
+                    if(isBadWord(message)) {
+                        if(message.contains("]")) { //ranks
+                            message = message.substring(message.indexOf("]") + 2);
+
+                        } else { //non-ranks
+                            message=message.substring(message.indexOf("Guild >") + 10);
+                        }
+                        if(message.contains("[")) {//guild rank title
+                            message = message.substring(0 , message.indexOf("[") - 3);
+                        } else { //no guild rank
+                            message = message.substring(0 , message.indexOf("\u00a7f"));
+                        }
+                        messages.add("g kick " + message + " profane messages are not allowed here. /g join MatthewUtzig");
+                        System.out.println("kicked " + message + " for profane language");
+                    }
+                }*/
+
 
                 //promote supporters
                 if (message.contains("\u00a7r\u00a7ejoined the guild") || message.contains("\u00a7r\u00a7e joined the guild")) {
@@ -130,7 +159,6 @@ public class AutoGuildTickHandler {
                             guildMembers = true;
                         }
                     } else {
-                        System.out.println(message);
                         //check guild member count
                         if (message.contains("\u00a7eTotal Members: \u00a7r\u00a7a")) {
                             System.out.println("Looking for members");
@@ -194,6 +222,8 @@ public class AutoGuildTickHandler {
                             if(guildCheck) {
                                 guildCheck = false;
                                 Minecraft.getMinecraft().thePlayer.sendChatMessage("/guild list");
+                                abovePruneLimit = false;
+                                lookForSupporters = false;
                             } else {
                                 //go to new lobby
                                 newLobby = false;
@@ -231,14 +261,42 @@ public class AutoGuildTickHandler {
                 }
                 //5% change of adding motd
                 Random rand = new Random();
-                if(rand.nextInt(150) == 10) {
+                if(rand.nextInt(110) == 10) {
                     //if(ENABLE_MOTD) {
-                        messages.add("gchat " + MessageOfTheDay.getMOTD());
+                       //messages.add("gchat " + MessageOfTheDay.getMOTD());
                     //}
                 }
             }
         } catch (Exception e) {
             System.out.println("Error: script running when not connected to server");
         }
+    }
+
+    protected static boolean isBadWord(String message) {
+
+        //replace all symbols and spaces
+        message = message.replaceAll("[^a-zA-Z0-9]+","");
+        message = message.toLowerCase();
+
+        if(!initialized) {
+            initialized = true;
+            badwords.add("fuck");
+            badwords.add("shit");
+            badwords.add("dick");
+            badwords.add("bitch");
+            badwords.add("cock");
+            badwords.add("nigger");
+            badwords.add("nigga");
+        }
+
+        message = message.replaceAll("1","i");
+        message = message.replaceAll("0","o");
+
+        for (int i = 0; i < badwords.size(); i++) {
+            if(message.contains(badwords.get(i))) {
+                return true;
+            }
+        }
+        return false;
     }
 }
