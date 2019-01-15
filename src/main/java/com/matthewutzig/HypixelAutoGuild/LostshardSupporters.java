@@ -43,6 +43,21 @@ public class LostshardSupporters {
             supporters.add("techmarkgaming");
             supporters.add("whitplayz");
             supporters.add("paulobbe");
+            supporters.add("zadioc");
+            supporters.add("deafpower18");
+            supporters.add("skywarrior299");
+            supporters.add("lamfugax");
+            supporters.add("ares054");
+            supporters.add("ktap4321");
+            supporters.add("ylipee_br");
+            supporters.add("wesleyjef");
+            supporters.add("croooked");
+            supporters.add("bengee23");
+            supporters.add("emptied");
+            supporters.add("bogiplay_yt");
+            supporters.add("styxasiangg");
+            supporters.add("bengee23");
+            supporters.add("emptied_");
         }
         return supporters.contains(name.toLowerCase());
 
