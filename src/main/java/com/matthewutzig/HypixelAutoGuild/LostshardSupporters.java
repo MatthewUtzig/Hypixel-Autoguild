@@ -58,6 +58,17 @@ public class LostshardSupporters {
             supporters.add("styxasiangg");
             supporters.add("bengee23");
             supporters.add("emptied_");
+            supporters.add("w1nter_s0ld1er");
+            supporters.add("garynlol");
+            supporters.add("master_chief42");
+            supporters.add("224659477");
+            supporters.add("malic3_");
+            supporters.add("prodigiousus");
+            supporters.add("cringefridge");
+            supporters.add("forkannaa");
+            supporters.add("destroyer83746");
+            supporters.add("nukestye");
+            supporters.add("smooshed_potato");
         }
         return supporters.contains(name.toLowerCase());
 

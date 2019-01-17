@@ -263,7 +263,7 @@ public class AutoGuildTickHandler {
                 Random rand = new Random();
                 if(rand.nextInt(110) == 10) {
                     //if(ENABLE_MOTD) {
-                       //messages.add("gchat " + MessageOfTheDay.getMOTD());
+                       messages.add("gchat " + MessageOfTheDay.getMOTD());
                     //}
                 }
             }
