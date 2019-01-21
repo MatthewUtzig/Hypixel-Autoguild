@@ -69,6 +69,27 @@ public class LostshardSupporters {
             supporters.add("destroyer83746");
             supporters.add("nukestye");
             supporters.add("smooshed_potato");
+            supporters.add("mommylonglegs");
+            supporters.add("itztruuee");
+            supporters.add("fre_sh");
+            supporters.add("_monika");
+            supporters.add("andywilcox11");
+            supporters.add("clearrelic24");
+            supporters.add("soccerdefense11");
+            supporters.add("bobbyu123");
+            supporters.add("diegomocu");
+            supporters.add("thenewyoutuber");
+            supporters.add("tutlebitz");
+            supporters.add("skyle_playz");
+            supporters.add("charlo95e");
+            supporters.add("krems");
+            supporters.add("rustygamesgr");
+            supporters.add("hkgz");
+            supporters.add("mutantninja2");
+            supporters.add("4_04");
+            supporters.add("zacr1");
+            supporters.add("a0z0");
+            supporters.add("larzzzzzz");
         }
         return supporters.contains(name.toLowerCase());
 
