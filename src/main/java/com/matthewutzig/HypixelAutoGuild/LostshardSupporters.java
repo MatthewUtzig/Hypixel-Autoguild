@@ -112,7 +112,27 @@ public class LostshardSupporters {
             supporters.add("diamondminer9908");
             supporters.add("elmonoob_vn");
             supporters.add("mayrndz");
-            supporters.add("nuxll");
+            supporters.add("reylordfx");
+            supporters.add("annoyingrains_g");
+            supporters.add("bubblewarriorz");
+            supporters.add("artedu118");
+            supporters.add("einhander099");
+            supporters.add("onlykota");
+            supporters.add("forgivingyou2k");
+            supporters.add("aj0613");
+            supporters.add("chxoqity");
+            supporters.add("uravgcreeper_yt");
+            supporters.add("ironspiderzz");
+            supporters.add("jadss_pt");
+            supporters.add("17oos");
+            supporters.add("salty816");
+            supporters.add("catherineanne200");
+            supporters.add("froad");
+            supporters.add("donaldjtrumpmaga");
+            supporters.add("_unseated");
+            supporters.add("_deeew");
+            supporters.add("reconsiders");
+            supporters.add("audoz");
         }
         return supporters.contains(name.toLowerCase());
 

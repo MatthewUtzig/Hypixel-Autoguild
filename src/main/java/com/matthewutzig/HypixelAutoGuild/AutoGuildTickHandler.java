@@ -132,7 +132,7 @@ public class AutoGuildTickHandler {
                                     //add kick player to command queue
                                     String playerName = splitMessage[i].substring(0, splitMessage[i].indexOf("\u00a7c"));
                                     System.out.println("Added " + playerName + " to the kick queue.");
-                                    messages.add("guild kick " + playerName + " you were kicked for inactivity. /guild join MatthewUtzig");
+                                    messages.add("guild kick " + playerName + " you were kicked for logging out. Rejoin with /guild join narbys");
                                     kickCount++;
                                     if (kickCount >= PRUNE_COUNT) {
                                         kickCount = 0;
