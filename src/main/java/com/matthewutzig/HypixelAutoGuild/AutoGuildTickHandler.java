@@ -8,10 +8,9 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import scala.actors.migration.pattern;
 
+import java.util.*;
 import java.util.regex.Pattern;
 
-import java.util.ArrayList;
-import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,11 +18,12 @@ public class AutoGuildTickHandler {
     protected static final int PRUNE_LIMIT = 123; //the maximum number of players in the guild before pruning starts.
     protected static final int PRUNE_COUNT = 5; //the number of members to prune.
     protected static final boolean CHAT_DEBUG = false; //output all unformatted chat
-    //protected static final boolean ENABLE_MOTD = false;
+    protected static final boolean ENABLE_MOTD = true; //Whether to enable guild messages
 
     protected static ArrayList<String> messages = new ArrayList<String>();
     protected static int tickRemaining = 0;
     protected static int kickCount = 0;
+    protected static int spamCheckTicks = 0;
 
     protected static boolean newLobby = true; //stores whether to warp to new lobby
     protected static boolean guildMembers = false; //stores whether the next chat messages will be the list of guild members
@@ -33,9 +33,7 @@ public class AutoGuildTickHandler {
     protected static boolean waitingForLobby = false;
     protected static boolean lookForSupporters = false;
 
-    protected static Pattern pt;
-    protected static ArrayList<String> badwords = new ArrayList<String>();
-    protected static boolean initialized = false;
+    protected static HashMap<String, Integer> messageCounter = new HashMap<String, Integer>();
 
     public static boolean scriptEnabled = false;
 
@@ -55,24 +53,27 @@ public class AutoGuildTickHandler {
                     System.out.println(message);
                 }
 
-                //filter profane language
-                /*if(message.contains("Guild >")) {
-                    if(isBadWord(message)) {
-                        if(message.contains("]")) { //ranks
-                            message = message.substring(message.indexOf("]") + 2);
+                //Count chat messages for spam
+                if(message.contains("Guild >")) {
+                    //convert message to playername
+                    if(message.contains("]")) { //ranks
+                        message = message.substring(message.indexOf("]") + 2);
 
-                        } else { //non-ranks
-                            message=message.substring(message.indexOf("Guild >") + 10);
-                        }
-                        if(message.contains("[")) {//guild rank title
-                            message = message.substring(0 , message.indexOf("[") - 3);
-                        } else { //no guild rank
-                            message = message.substring(0 , message.indexOf("\u00a7f"));
-                        }
-                        messages.add("g kick " + message + " profane messages are not allowed here. /g join MatthewUtzig");
-                        System.out.println("kicked " + message + " for profane language");
+                    } else { //non-ranks
+                        message=message.substring(message.indexOf("Guild >") + 10);
                     }
-                }*/
+                    if(message.contains("[")) {//guild rank title
+                        message = message.substring(0 , message.indexOf("[") - 3);
+                    } else { //no guild rank
+                        message = message.substring(0 , message.indexOf("\u00a7f"));
+                    }
+                    //increment or initialize counter
+                    if(messageCounter.containsKey(message)) {
+                        messageCounter.put(message, messageCounter.get(message) + 1);
+                    } else {
+                        messageCounter.put(message, 1);
+                    }
+                }
 
 
                 //promote supporters
@@ -191,7 +192,14 @@ public class AutoGuildTickHandler {
         try {
             //make sure script is enabled
             if(scriptEnabled) {
-                //check if three seconds have elapsed
+                //check if one minute has elapsed (for spam check)
+                spamCheckTicks--;
+                if (spamCheckTicks <= 0) {
+                    spamCheckTicks = 3600;
+                    performSpamCheck();
+                }
+
+                //check if a half second have elapsed. (Send one message every half second)
                 tickRemaining--;
                 if (tickRemaining <= 0) {
                     //set counter back to 30 ticks
@@ -252,6 +260,40 @@ public class AutoGuildTickHandler {
         }
     }
 
+    /*
+        Method to be called every minute.
+        If a player sends more than 0.2 messages per second for 3 minutes, mute them.
+    */
+    protected static void performSpamCheck() {
+        //loop through messages amounts
+        Set set = messageCounter.entrySet();
+        Iterator iterator = set.iterator();
+        while(iterator.hasNext()) {
+            Map.Entry entry = (Map.Entry)iterator.next();
+            //mute players with over 36 messages
+            if((Integer)entry.getValue() >= 36) {
+                messages.add("gchat muted " + entry.getValue() + " for spam. Appeal at https://discord.gg/hUAfPmS");
+                messages.add("guild mute " + entry.getValue() + " 30d");
+            }
+            //decrease all messages by 12
+            int newAmount = (Integer)entry.getValue() - 12;
+            if(newAmount < 0) {
+                newAmount = 0;
+            }
+            //remove player from messageCounter if the player is at 0 messages.
+            if(newAmount > 0) {
+                messageCounter.put((String) entry.getKey(), newAmount);
+            } else {
+                messageCounter.remove(entry.getKey());
+            }
+        }
+
+    }
+
+    /*
+        Queue all online players to be invited.
+        Also has a random chance of queuing an info message.
+     */
     protected static void appendPlayersToList() {
         try {
             java.util.List<EntityPlayer> players = Minecraft.getMinecraft().theWorld.playerEntities;
@@ -262,9 +304,9 @@ public class AutoGuildTickHandler {
                 //5% change of adding motd
                 Random rand = new Random();
                 if(rand.nextInt(110) == 10) {
-                    //if(ENABLE_MOTD) {
+                    if(ENABLE_MOTD) {
                        messages.add("gchat " + MessageOfTheDay.getMOTD());
-                    //}
+                    }
                 }
             }
         } catch (Exception e) {
