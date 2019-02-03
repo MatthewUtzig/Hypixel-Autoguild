@@ -133,6 +133,15 @@ public class LostshardSupporters {
             supporters.add("_deeew");
             supporters.add("reconsiders");
             supporters.add("audoz");
+            supporters.add("nodoagent");
+            supporters.add("milkandtoast2");
+            supporters.add("yummmilk");
+            supporters.add("mr_haoxx");
+            supporters.add("maaatik");
+            supporters.add("ropuch");
+            supporters.add("creeperan");
+            supporters.add("a14u");
+            supporters.add("srwitherness_g0d");
         }
         return supporters.contains(name.toLowerCase());
 

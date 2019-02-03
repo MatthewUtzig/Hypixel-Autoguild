@@ -263,7 +263,7 @@ public class AutoGuildTickHandler {
                 Random rand = new Random();
                 if(rand.nextInt(110) == 10) {
                     //if(ENABLE_MOTD) {
-                       //messages.add("gchat " + MessageOfTheDay.getMOTD());
+                       messages.add("gchat " + MessageOfTheDay.getMOTD());
                     //}
                 }
             }
@@ -272,31 +272,4 @@ public class AutoGuildTickHandler {
         }
     }
 
-    protected static boolean isBadWord(String message) {
-
-        //replace all symbols and spaces
-        message = message.replaceAll("[^a-zA-Z0-9]+","");
-        message = message.toLowerCase();
-
-        if(!initialized) {
-            initialized = true;
-            badwords.add("fuck");
-            badwords.add("shit");
-            badwords.add("dick");
-            badwords.add("bitch");
-            badwords.add("cock");
-            badwords.add("nigger");
-            badwords.add("nigga");
-        }
-
-        message = message.replaceAll("1","i");
-        message = message.replaceAll("0","o");
-
-        for (int i = 0; i < badwords.size(); i++) {
-            if(message.contains(badwords.get(i))) {
-                return true;
-            }
-        }
-        return false;
-    }
 }
