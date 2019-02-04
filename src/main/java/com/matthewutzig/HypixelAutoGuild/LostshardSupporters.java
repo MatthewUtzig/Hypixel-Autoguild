@@ -142,6 +142,7 @@ public class LostshardSupporters {
             supporters.add("creeperan");
             supporters.add("a14u");
             supporters.add("srwitherness_g0d");
+            supporters.add("hoodie567");
         }
         return supporters.contains(name.toLowerCase());
 

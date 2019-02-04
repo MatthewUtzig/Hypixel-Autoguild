@@ -70,8 +70,10 @@ public class AutoGuildTickHandler {
                     //increment or initialize counter
                     if(messageCounter.containsKey(message)) {
                         messageCounter.put(message, messageCounter.get(message) + 1);
+                        System.out.println("Spam prevention: " + message + " has sent " + messageCounter.get(message) + " messages in the last minute");
                     } else {
                         messageCounter.put(message, 1);
+                        System.out.println("Spam prevention: " + message + " has sent 1 message in the last minute");
                     }
                 }
 
@@ -133,7 +135,7 @@ public class AutoGuildTickHandler {
                                     //add kick player to command queue
                                     String playerName = splitMessage[i].substring(0, splitMessage[i].indexOf("\u00a7c"));
                                     System.out.println("Added " + playerName + " to the kick queue.");
-                                    messages.add("guild kick " + playerName + " you were kicked for logging out. Rejoin with /guild join narbys");
+                                    messages.add("guild kick " + playerName + " you were kicked for logging out. Rejoin with /guild join zsr11387");
                                     kickCount++;
                                     if (kickCount >= PRUNE_COUNT) {
                                         kickCount = 0;
@@ -195,7 +197,7 @@ public class AutoGuildTickHandler {
                 //check if one minute has elapsed (for spam check)
                 spamCheckTicks--;
                 if (spamCheckTicks <= 0) {
-                    spamCheckTicks = 3600;
+                    spamCheckTicks = 1200;
                     performSpamCheck();
                 }
 
@@ -265,18 +267,19 @@ public class AutoGuildTickHandler {
         If a player sends more than 0.2 messages per second for 3 minutes, mute them.
     */
     protected static void performSpamCheck() {
+        System.out.println("Performing spam check");
         //loop through messages amounts
         Set set = messageCounter.entrySet();
         Iterator iterator = set.iterator();
         while(iterator.hasNext()) {
             Map.Entry entry = (Map.Entry)iterator.next();
-            //mute players with over 36 messages
-            if((Integer)entry.getValue() >= 36) {
-                messages.add("gchat muted " + entry.getValue() + " for spam. Appeal at https://discord.gg/hUAfPmS");
-                messages.add("guild mute " + entry.getValue() + " 30d");
+            //mute players with over 20 messages
+            if((Integer)entry.getValue() >= 10) {
+                messages.add("gchat muted " + entry.getKey() + " for spam. Appeal at https://discord.gg/hUAfPmS");
+                messages.add("guild mute " + entry.getKey() + " 30d");
             }
             //decrease all messages by 12
-            int newAmount = (Integer)entry.getValue() - 12;
+            int newAmount = (Integer)entry.getValue() - 10;
             if(newAmount < 0) {
                 newAmount = 0;
             }

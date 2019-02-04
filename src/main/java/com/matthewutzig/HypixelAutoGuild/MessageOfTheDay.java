@@ -14,7 +14,7 @@ public class MessageOfTheDay {
             initialized = true;
             motds.add("This guild has a discord! Join with https://discord.gg/hUAfPmS");
             motds.add("This guild has special rules. Read them at https://discord.gg/hUAfPmS");
-            motds.add("Want to invite a friend? tell them to use /guild join narbys");
+            motds.add("Want to invite a friend? tell them to use /guild join zsr11387");
             motds.add("Want to make a party. Everyone in the guild has access to /guild party");
             motds.add("Tired of seeing people leave/join. Disable it in /g menu -> settings -> personal");
             motds.add("Want special perks? Get the supporter rank. (its free) https://discord.gg/hUAfPmS"); //double prob
