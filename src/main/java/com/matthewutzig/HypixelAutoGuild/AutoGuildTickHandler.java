@@ -350,7 +350,7 @@ public class AutoGuildTickHandler {
     protected static int getNumbers(String string) {
         int numbers = 0;
         for(int i = 0; i < string.length(); i++) {
-            if (Character.isDigit(string.charAt(i)) {
+            if (Character.isDigit(string.charAt(i))) {
                 numbers++;
             }
         }
