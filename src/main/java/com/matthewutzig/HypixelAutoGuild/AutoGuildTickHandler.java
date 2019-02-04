@@ -6,6 +6,7 @@ import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import scala.Char;
 import scala.actors.migration.pattern;
 
 import java.util.*;
@@ -71,6 +72,13 @@ public class AutoGuildTickHandler {
                     if(messageCounter.containsKey(message)) {
                         messageCounter.put(message, messageCounter.get(message) + 1);
                         System.out.println("Spam prevention: " + message + " has sent " + messageCounter.get(message) + " messages in the last minute");
+                        //mute players with over 20 messages
+                        if(messageCounter.get(message) >= 20) {
+                            messages.add("gchat muted " + message + " for spam. Appeal at https://discord.gg/hUAfPmS");
+                            messages.add("guild mute " + message + " 1h");
+                            messageCounter.remove(message);
+                        }
+
                     } else {
                         messageCounter.put(message, 1);
                         System.out.println("Spam prevention: " + message + " has sent 1 message in the last minute");
@@ -204,8 +212,8 @@ public class AutoGuildTickHandler {
                 //check if a half second have elapsed. (Send one message every half second)
                 tickRemaining--;
                 if (tickRemaining <= 0) {
-                    //set counter back to 30 ticks
-                    tickRemaining = 30;
+                    //set counter back to 1 second. Extra tick to account for lag.
+                    tickRemaining = 21;
                     //check if read to send /lobby
                     if(waitingForLobby) {
                         waitingForLobby = false;
@@ -273,13 +281,8 @@ public class AutoGuildTickHandler {
         Iterator iterator = set.iterator();
         while(iterator.hasNext()) {
             Map.Entry entry = (Map.Entry)iterator.next();
-            //mute players with over 20 messages
-            if((Integer)entry.getValue() >= 10) {
-                messages.add("gchat muted " + entry.getKey() + " for spam. Appeal at https://discord.gg/hUAfPmS");
-                messages.add("guild mute " + entry.getKey() + " 30d");
-            }
             //decrease all messages by 12
-            int newAmount = (Integer)entry.getValue() - 10;
+            int newAmount = (Integer)entry.getValue() - 20;
             if(newAmount < 0) {
                 newAmount = 0;
             }
@@ -301,7 +304,8 @@ public class AutoGuildTickHandler {
         try {
             java.util.List<EntityPlayer> players = Minecraft.getMinecraft().theWorld.playerEntities;
             for (int i = 0; i < players.size(); i++) {
-                if(players.get(i).getName().length() != 10) {
+                //add players to invite list if they are not a Hypixel bot
+                if(!isHypixelBot(players.get(i).getName())) {
                     messages.add("guild invite " + players.get(i).getName());
                 }
                 //5% change of adding motd
@@ -317,4 +321,39 @@ public class AutoGuildTickHandler {
         }
     }
 
+    /*
+        Returns whether the specified player is a Hypixel bot. These are either watchdog bots or lobby npcs.
+
+        >99% chance of correctly identifying a player
+        98.4% chance of correctly identifying a bot.
+     */
+    protected static boolean isHypixelBot(String playerName) {
+        //bots always have 10 character names
+        if(playerName.length() != 10) {
+            return false;
+        }
+        //most players have numbers at end of names
+        if(getNumbers(playerName.substring(0,6)) == 0) {
+            return false;
+        }
+        //names will 1 or less letters OR 1 or less numbers are most likely players
+        int numbers = getNumbers(playerName);
+        if(numbers >= 9 || numbers <= 1) {
+            return false;
+        }
+        return true;
+    }
+
+    /*
+        Returns the number of numbers in a string.
+    */
+    protected static int getNumbers(String string) {
+        int numbers = 0;
+        for(int i = 0; i < string.length(); i++) {
+            if (Character.isDigit(string.charAt(i)) {
+                numbers++;
+            }
+        }
+        return numbers;
+    }
 }
