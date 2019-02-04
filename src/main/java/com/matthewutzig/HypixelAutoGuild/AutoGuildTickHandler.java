@@ -72,8 +72,8 @@ public class AutoGuildTickHandler {
                     if(messageCounter.containsKey(message)) {
                         messageCounter.put(message, messageCounter.get(message) + 1);
                         System.out.println("Spam prevention: " + message + " has sent " + messageCounter.get(message) + " messages in the last minute");
-                        //mute players with over 20 messages
-                        if(messageCounter.get(message) >= 20) {
+                        //mute players with over 10 messages
+                        if(messageCounter.get(message) >= 10) {
                             messages.add("gchat muted " + message + " for spam. Appeal at https://discord.gg/hUAfPmS");
                             messages.add("guild mute " + message + " 1h");
                             messageCounter.remove(message);
@@ -206,14 +206,14 @@ public class AutoGuildTickHandler {
                 spamCheckTicks--;
                 if (spamCheckTicks <= 0) {
                     spamCheckTicks = 1200;
-                    performSpamCheck();
+                    messageCounter.clear();
                 }
 
                 //check if a half second have elapsed. (Send one message every half second)
                 tickRemaining--;
                 if (tickRemaining <= 0) {
-                    //set counter back to 1 second. Extra tick to account for lag.
-                    tickRemaining = 21;
+                    //set counter back to 6 ticks. This is the shortest time where no "you are sending commands to fast" is received.
+                    tickRemaining = 6;
                     //check if read to send /lobby
                     if(waitingForLobby) {
                         waitingForLobby = false;
@@ -271,32 +271,6 @@ public class AutoGuildTickHandler {
     }
 
     /*
-        Method to be called every minute.
-        If a player sends more than 0.2 messages per second for 3 minutes, mute them.
-    */
-    protected static void performSpamCheck() {
-        System.out.println("Performing spam check");
-        //loop through messages amounts
-        Set set = messageCounter.entrySet();
-        Iterator iterator = set.iterator();
-        while(iterator.hasNext()) {
-            Map.Entry entry = (Map.Entry)iterator.next();
-            //decrease all messages by 12
-            int newAmount = (Integer)entry.getValue() - 20;
-            if(newAmount < 0) {
-                newAmount = 0;
-            }
-            //remove player from messageCounter if the player is at 0 messages.
-            if(newAmount > 0) {
-                messageCounter.put((String) entry.getKey(), newAmount);
-            } else {
-                messageCounter.remove(entry.getKey());
-            }
-        }
-
-    }
-
-    /*
         Queue all online players to be invited.
         Also has a random chance of queuing an info message.
      */
@@ -308,9 +282,9 @@ public class AutoGuildTickHandler {
                 if(!isHypixelBot(players.get(i).getName())) {
                     messages.add("guild invite " + players.get(i).getName());
                 }
-                //5% change of adding motd
+                //.1% change of adding motd
                 Random rand = new Random();
-                if(rand.nextInt(110) == 10) {
+                if(rand.nextInt(250) == 10) {
                     if(ENABLE_MOTD) {
                        messages.add("gchat " + MessageOfTheDay.getMOTD());
                     }
