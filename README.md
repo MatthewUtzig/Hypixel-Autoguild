@@ -13,8 +13,8 @@ To enable, goto line 288 of AutoGuildTickHandler.java
 1.8.9
 
 ### Features
-Invites people from games and lobbies to your guild. (now limited to 10 every 5 minutes)
-Kicks offline players when the guild fills up.
-Promotes specified players to the "Supporter" guild rank when they join the guild. People with this rank get kicked last.
-Mutes players who spam chat. 
-Kicks blacklisted players when they join the guild. This is really useful if you want to ban someone from multiple guilds.
+1. Invites people from games and lobbies to your guild. (now limited to 10 every 5 minutes).
+2. Kicks offline players when the guild fills up.
+3. Promotes specified players to the "Supporter" guild rank when they join the guild. People with this rank get kicked last.
+4. Mutes players who spam chat. 
+5. Kicks blacklisted players when they join the guild. This is really useful if you want to ban someone from multiple guilds.
