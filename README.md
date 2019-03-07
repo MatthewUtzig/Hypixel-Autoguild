@@ -9,10 +9,10 @@ It didn't seem worthwhile to rewrite the entire project.
 The provided jar does not contain the automated guild messages. To enable those, you will have to compile the code yourself.
 To enable, goto line 288 of AutoGuildTickHandler.java
 
-#MC-version
+### MC-version
 1.8.9
 
-#Features
+### Features
 Invites people from games and lobbies to your guild. (now limited to 10 every 5 minutes)
 Kicks offline players when the guild fills up.
 Promotes specified players to the "Supporter" guild rank when they join the guild. People with this rank get kicked last.
