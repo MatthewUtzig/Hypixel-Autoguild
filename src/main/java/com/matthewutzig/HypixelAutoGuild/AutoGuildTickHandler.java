@@ -143,7 +143,7 @@ public class AutoGuildTickHandler {
                                     //add kick player to command queue
                                     String playerName = splitMessage[i].substring(0, splitMessage[i].indexOf("\u00a7c"));
                                     System.out.println("Added " + playerName + " to the kick queue.");
-                                    messages.add("guild kick " + playerName + " you were kicked for logging out. Rejoin with /guild join zsr11387");
+                                    messages.add("guild kick " + playerName + " you were kicked for logging out. Rejoin with /guild join SulphurAdam");
                                     kickCount++;
                                     if (kickCount >= PRUNE_COUNT) {
                                         kickCount = 0;
@@ -285,9 +285,11 @@ public class AutoGuildTickHandler {
                 //.1% change of adding motd
                 Random rand = new Random();
                 if(rand.nextInt(250) == 10) {
-                    if(ENABLE_MOTD) {
-                       messages.add("gchat " + MessageOfTheDay.getMOTD());
-                    }
+                    //MESSAGES DISABLED FOR PUBLIC RELEASE. REMOVE THESE COMMENTS TO ENABLE.
+                    //Change messages in the MessageOfTheDay class.
+                    //if(ENABLE_MOTD) {
+                    // messages.add("gchat " + MessageOfTheDay.getMOTD());
+                    //}
                 }
             }
         } catch (Exception e) {
